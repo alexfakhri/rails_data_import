@@ -6,7 +6,7 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    @votes = Vote.select("choice, sum(CASE WHEN validity != 'during' THEN 1 ELSE 0 end) uncounted_votes, sum(CASE WHEN validity = 'during' THEN 1 ELSE 0 end) valid_votes").where(campaign_id: @campaign.id).group(:choice)
+    @votes = Vote.select("choice, sum(CASE WHEN validity != 'during' THEN 1 ELSE 0 end) uncounted_votes, sum(CASE WHEN validity = 'during' THEN 1 ELSE 0 end) valid_votes").where(campaign_id: @campaign.id).group(:choice).order("valid_votes DESC")
   end
 
 
