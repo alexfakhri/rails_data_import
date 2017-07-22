@@ -14,7 +14,7 @@ feature 'campaigns' do
     end
 
     scenario "should have a link to the view the campaign" do
-      expect(page).to have_link 'Show'
+      expect(page).to have_link 'View'
     end
   end
 

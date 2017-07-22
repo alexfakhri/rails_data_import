@@ -1,15 +1,24 @@
-<p id="notice"><%= notice %></p>
-
-<p>
+<h2>
   <strong>Campaign:</strong>
   <%= @campaign.campaign %>
-</p>
+</h2>
 
-<p>
-  <strong>Votes:</strong>
-  <% @votes.each do |vote| %>
-  <%= vote.choice %>
-  <%= vote.valid_votes %>
-  <%= vote.uncounted_votes %>
-  <% end %>
-</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Choice</th>
+      <th>Valid Votes</th>
+      <th>Uncounted Votes</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @votes.each do |vote| %>
+      <tr>
+        <td><%= vote.choice %></td>
+        <td><%= vote.valid_votes %></td>
+        <td><%= vote.uncounted_votes %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
