@@ -5,5 +5,11 @@
   <%= @campaign.campaign %>
 </p>
 
-<%= link_to 'Edit', edit_campaign_path(@campaign) %> |
-<%= link_to 'Back', campaigns_path %>
+<p>
+  <strong>Votes:</strong>
+  <% @votes.each do |vote| %>
+  <%= vote.choice %>
+  <%= vote.valid_votes %>
+  <%= vote.uncounted_votes %>
+  <% end %>
+</p>
