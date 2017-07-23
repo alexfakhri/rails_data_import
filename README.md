@@ -1,7 +1,7 @@
 Rails Data Import
 ========
 
-A basic rails application that imports data from a text file and saves it the database.
+A basic Ruby on Rails application that imports data from a text file and saves it the database.
 
 Tasks
 ----
@@ -9,7 +9,7 @@ Deliverables:
 
  - [x] A rails application and associated database to hold the data
  - [x] A basic web front-end to view the results which should;
-   - [x]Present a list of campaigns for which we have results.
+   - [x] Present a list of campaigns for which we have results.
    - [x] When the user clicks on a campaign, present a list of the
      candidates, their scores, and the number of messages which were sent in
      but not counted
@@ -49,12 +49,12 @@ To setup database:
 $ rails db:create db:migrate
 ```
 
-To see RSpec tests:
+To run RSpec tests:
 ```shell
 $ rspec
 ```
 
-Run application:
+Start application:
 ```shell
 $ bin/rails server
 in browser go to: http://localhost:3000/
@@ -74,22 +74,21 @@ ZSH Users:
 ```
 $ rake "import_file:import[public/votes.txt]"
 ```
-The app assumes the file lives somewhere in your rails directory. The sample data provided has been put into the public folder, add files you want to import into the public folder and run the commands above.
+The app assumes the file lives somewhere in your rails directory, 'Rails.root'. The sample data provided has been put into the public folder, add files you want to import into the public folder and run the commands above.
 
 Solving the problem:
 -----
 - My approach was simple and followed the deliverables provided:
   - A rails application and associated database to hold the data:
     - First I created the basic rails application with a PostgreSQL database and RSpec and Capybara for testing.
-  - A basic web front-end to view the results which should:
+  - A basic web front-end to view the results:
     - I started with creating the models, controllers and views required to store and display the data.
     - Looking at the data I decided to store them in two different tables: campaigns and votes. Votes belongs to a campaign, a campaign has many votes.
-    - This was the most logical approach and the easiest way to deal with the data, campaigns are created if there is an ID present that has not been used before, if the campaign exists the vote would belong to that campaign. This also made the counting and grouping of the votes easier to deal with.
+    - This was the most logical approach and the easiest way to deal with the data, campaigns are created if there is an ID present that has not been used before, if the campaign exists the vote would belong to that campaign. This also made the counting and grouping of the votes easier to deal with. Following this I wrote a query that would group the candidates by name and count the votes based on the condition of the vote validity being 'during', or not 'during', this is then ordered by the number of valid_votes.
   - A command-line script that will import log file data into the application. Any lines that are not well-formed should be discarded:
-    - For the data import I decided to use a PORO(Plain old Ruby object) to parse the data and write it to the database.
-    - Following Single Responsibility Principle I felt like this was the best approach to it, as the models should not be responsible for carrying out the processing, it should be it's own ruby object that would take care of this process.
-    - In the models folder I created LogFileImporter class that takes a given file and processes it. It opens the file, takes every line individually, ensures that the data is valid and writes it to the correct models.
-    - Finally created a rake task that you can use in the command line to import data: 'rake import_file:import[public/votes.txt]'
+    - For the data import I decided to use a PORO(Plain old Ruby object) to parse the data and write it to the database. Following the Single Responsibility Principle I felt like this was the best approach to it, as the models should not be responsible for carrying out the processing, it should be it's own Ruby object that would take care of this process.
+    - In the models folder I created LogFileImporter class that takes a given file and processes it. It opens the file, takes every line individually, ensures that the data is valid and writes it to the correct models, if the data is not valid the line is skipped.
+    - Finally I created a rake task that you can use in the command line to import data: 'rake import_file:import[public/votes.txt]'. The LogFileImporter currently has a puts statement that outputs the data written to the database to the command line, it's just so you can see the process happening, without that line it may not be evident that processing is going on.
 
 
-- I've used Capybara for feature testing and RSpec for unit testing and model testing. I've followed TDD and BDD throughout the application to ensure good test coverage.
+- I've used Capybara for feature testing and RSpec for unit testing and model testing. I've followed TDD and BDD throughout the application to ensure that I'm testing expectations and writing good clean code. Run 'rspec' in the terminal to run tests.
